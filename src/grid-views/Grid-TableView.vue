@@ -20,6 +20,8 @@
     </div>
 </template>
 <script>
+    import TableRow from './../generic-rows/table-row.vue';
+
     export default {
 
         props: ['records', 'recordType'],
@@ -37,7 +39,7 @@
         },
 
         components: {
-            'table-row': require('./../generic-rows/table-row.vue')
+            TableRow
         },
 
         methods: {
