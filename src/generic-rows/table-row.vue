@@ -1,6 +1,6 @@
 <template>
     <tr>
-        <td v-for="key in rowKeys">
+        <td v-for="key in rowKeys" class="px-2">
             {{ record[key] }}
         </td>
     </tr>

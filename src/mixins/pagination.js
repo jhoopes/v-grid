@@ -1,5 +1,3 @@
-import jQuery from 'jquery';
-
 export default {
 
     computed: {
@@ -10,12 +8,25 @@ export default {
             }
             return false;
         },
+        currentPage() {
+            if(this.data.current_page) {
+                return this.data.current_page;
+            }
+
+            return 0;
+        },
+        totalPages() {
+            if(this.data.total) {
+                return this.data.total;
+            }
+
+            return 0;
+        }
     },
 
     watch: {
         data: function(val) {
             if(this.canPaginate) {
-                this.setPagination();
             }
         }
     },
@@ -33,22 +44,7 @@ export default {
 
             this.$nextTick(function() { // run the paginator after the next tick
 
-                jQuery('#' + this.uniqueId + '-pager').pagination({
-                    currentPage: this.data.current_page,
-                    items: this.data.total,
-                    itemsOnPage: this.data.per_page,
-                    cssStyle: 'pagination',
-                    hrefTextPrefix: search,
-                    prevText: '<i class="icon-previous"></i>',
-                    nextText: '<i class="icon-next"></i>',
-                    onPageClick: function(pageNumber, e) {
-                        if(typeof this.recordUrl !== 'undefined' && this.recordUrl !== null) {
-                            vm.getRecordsFromAPI(pageNumber);
-                        }else {
-                            vm.$emit('updatePage', pageNumber);
-                        }
-                    }
-                });
+
             });
         },
     }

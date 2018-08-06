@@ -2,10 +2,11 @@
 
     <div :id="'grid-' + uniqueId ">
         <component :is="gridType" :records.sync="records" :record-type="recordType"></component>
-        <div class="controls row-fluid">
-            <div class="pagination" :class="paginatorSize" v-if="canPaginate">
-                <ul :id="uniqueId + '-pager'" class="pagination-list"></ul>
-            </div>
+        <div class="flex justify-between controls">
+            <pagination
+                :current-page="currentPage"
+                :page-count="totalPages"
+            ></pagination>
             <div class="text-right" :class="addButtonSize" v-if="allowAdd">
                 <button @click="addRecord" class="btn btn-success"><i class="fa fa-plus"></i> {{ addButtonText }}</button>
             </div>
@@ -18,6 +19,7 @@
     import pagination from './mixins/pagination';
     import tableView from './grid-views/Grid-TableView.vue'
     import divRow from './grid-views/Grid-DivRow.vue'
+    import Pagination from './Pagination.vue';
     import { generateUniqueId } from './mixins/utils';
     export default {
 
@@ -86,23 +88,12 @@
                 }
                 return this.data;
             },
-            paginatorSize() {
-                if (this.allowAdd) {
-                    return 'span8';
-                }
-                return 'span12';
-            },
-            addButtonSize() {
-                if (this.allowAdd) {
-                    return 'span4';
-                }
-                return '';
-            }
         },
 
         components: {
             tableView,
             divRow,
+            Pagination
         },
 
         mixins: [ api, pagination ],
