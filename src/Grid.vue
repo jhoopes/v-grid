@@ -1,7 +1,7 @@
 <template>
 
     <div :id="'grid-' + uniqueId ">
-        <component :is="gridType" :records.sync="records" :record-type="recordType"></component>
+        <component :is="gridType" :records.sync="records" :record-type="recordType" :args="gridArgs"></component>
         <div class="flex justify-between controls">
             <pagination
                 :current-page="currentPage"
@@ -67,7 +67,12 @@
                 type: String,
                 default: null
             },
-            arguments: Object,
+            gridArgs: {
+                type: Object,
+                default() {
+                    return {};
+                },
+            }
         },
 
         data() {

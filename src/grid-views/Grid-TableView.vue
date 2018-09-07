@@ -15,7 +15,7 @@
 
 
         <div v-if="records.length == 0">
-            No Records
+            {{ noRecordsText }}
         </div>
     </div>
 </template>
@@ -24,7 +24,7 @@
 
     export default {
 
-        props: ['records', 'recordType'],
+        props: ['records', 'recordType', 'args'],
 
         data() {
             return {
@@ -40,6 +40,16 @@
 
         components: {
             TableRow
+        },
+
+        computed: {
+            noRecordsText() {
+                if(this.args.noRecordsText) {
+                    return this.args.noRecordsText
+                }
+
+                return 'No Records'
+            }
         },
 
         methods: {
