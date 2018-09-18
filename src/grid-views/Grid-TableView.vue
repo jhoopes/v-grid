@@ -44,7 +44,7 @@
 
         computed: {
             noRecordsText() {
-                if(this.args.noRecordsText) {
+                if(typeof this.args.noRecordsText !== "undefined") {
                     return this.args.noRecordsText
                 }
 
