@@ -1,6 +1,6 @@
 <template>
     <div class="table-responsive">
-        <table class="table table-hover">
+        <table class="table table-hover" v-if="records.length > 0">
             <thead>
                 <tr>
                     <th v-for="headerName in tableHeaders">
@@ -9,7 +9,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="record in records" :is="recordType" :record.sync="record" :base-record-id="baseRecordId" v-on:remove="removeRecord(record, $event)"></tr>
+                <tr v-for="record in records" :is="recordType" :record.sync="record" :base-record-id="baseRecordId" v-on:remove="removeRecord(record, $event)" :args="args"></tr>
             </tbody>
         </table>
 
