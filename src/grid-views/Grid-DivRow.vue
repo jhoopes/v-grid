@@ -1,7 +1,7 @@
 <template>
 
     <div id="records">
-        <div v-for="record in records" :is="recordType" :record="record" :base-record-id="baseRecordId" v-on:remove="removeRecord(record, $event)"></div>
+        <div v-for="record in records" :is="recordType" :record="record" :base-record-id="baseRecordId" v-on:remove="removeRecord(record, $event)" :args="args"></div>
         <div v-if="records.length == 0">
 
         </div>
@@ -11,7 +11,7 @@
 <script>
     export default {
 
-        props: ['records', 'recordType'],
+        props: ['records', 'recordType', 'args'],
 
         data() {
             return {
