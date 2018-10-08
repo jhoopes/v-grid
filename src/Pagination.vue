@@ -1,15 +1,15 @@
 <template>
-    <div class="pagination mt-4" v-if="pageCount > 1">
+    <div class="pagination m-4" v-if="pageCount > 1">
         <ul class="list-reset flex">
-            <li class="px-2 border rounded" :class="previousClass">
+            <li class="px-2 rounded" :class="previousClass">
                 <a @click="setCurrentPage(Math.max(1, currentPage-1))"
                    aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
             <li v-for="page in pages"
-                class="px-2 border cursor-pointer"
-                :class="page.number === null ? 'disabled' : ''"
+                class="px-2 cursor-pointer"
+                :class="paginationItemClass(page)"
             >
                 <a v-if="page.number"
                    @click="setCurrentPage(page.number)"
@@ -17,7 +17,7 @@
                     {{ page.number }}
                 </a><span v-if="page.number === null">...</span>
             </li>
-            <li :class="nextClass" class="px-2 border rounded">
+            <li :class="nextClass" class="px-2 rounded">
                 <a v-on:click="setCurrentPage(Math.min(pageCount, currentPage + 1))"
                    aria-label="Next"
                 >
@@ -100,6 +100,17 @@
                     });
                 }
                 return range;
+            },
+            paginationItemClass(page) {
+
+                if(!page.number) {
+                    return 'disabled';
+                }
+
+                if(this.currentPage === page.number) {
+                    return 'selected'
+                }
+
             },
             setCurrentPage(newPageNumber) {
                 this.$emit('updatePageNumber', newPageNumber);

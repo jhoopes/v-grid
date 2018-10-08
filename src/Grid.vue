@@ -6,6 +6,7 @@
             <pagination
                 :current-page="currentPage"
                 :page-count="totalPages"
+                @updatePageNumber="updatePagination"
             ></pagination>
             <div class="text-right" :class="addButtonSize" v-if="allowAdd">
                 <button @click="addRecord" class="btn btn-success"><i class="fa fa-plus"></i> {{ addButtonText }}</button>
@@ -67,6 +68,12 @@
                 type: String,
                 default: null
             },
+            pagination: {
+                type: Object,
+                default() {
+                    return {}
+                }
+            },
             gridArgs: {
                 type: Object,
                 default() {
@@ -90,6 +97,8 @@
                         this.data.data !== null) {
 
                     return this.data.data;
+                } else if(this.internalPagination) {
+                    return this.internalPage
                 }
                 return this.data;
             },
@@ -128,6 +137,15 @@
                     isNew: true
                 });
             },
+            updatePagination(newPage) {
+
+                if(this.internalPagination) {
+                    this.internalCurrentPage = newPage;
+                }else {
+                    this.$emit('updatePagination', newPage);
+                }
+
+            }
         }
     }
 </script>
