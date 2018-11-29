@@ -10,10 +10,10 @@ export default {
 
     computed: {
         canPaginate() {
-            if(typeof this.data.current_page !== 'undefined' &&
+            if (typeof this.data.current_page !== 'undefined' &&
                 this.data.current_page !== null) {
                 return true;
-            } else if( this.pagination.per_page ) {
+            } else if (this.pagination.per_page) {
                 this.internalPagination = true;
                 this.calculateInternalPage();
                 return true;
@@ -21,16 +21,16 @@ export default {
             return false;
         },
         currentPage() {
-            if(this.data.current_page) {
+            if (this.data.current_page) {
                 return this.data.current_page;
-            } else if(this.internalPagination) {
+            } else if (this.internalPagination) {
                 return this.internalCurrentPage
             }
 
             return 0;
         },
         totalPages() {
-            if(this.data.total) {
+            if (this.data.total) {
                 return this.data.total;
             } else if (this.internalPagination) {
                 return this.internalTotalPages
@@ -39,25 +39,28 @@ export default {
             return 0;
         },
         internalPage() {
-
-            var start = (this.currentPage * this.pagination.per_page) - 1;
+            if (this.currentPage == 1) {
+                var start = 0;
+            } else {
+                var start = (this.currentPage * this.pagination.per_page) - this.pagination.per_page;
+            }
 
             var end = null;
-            if(this.currentPage !== this.totalPages) {
-                end = ( (this.currentPage * this.pagination.per_page) + this.pagination.per_page)  - 1;
+            if (this.currentPage !== this.totalPages) {
+                end = this.currentPage * this.pagination.per_page;
             }
-            if(end) {
+
+            if (end) {
                 return this.data.slice(start, end);
-            }else {
+            } else {
                 return this.data.slice(start);
             }
         }
     },
 
     watch: {
-        data: function(val) {
-            if(this.canPaginate) {
-            }
+        data: function (val) {
+            if (this.canPaginate) {}
         }
     },
 
@@ -66,20 +69,20 @@ export default {
             var vm = this;
 
             var search = window.location.search;
-            if(!search) {
+            if (!search) {
                 search = "#page";
-            }else {
+            } else {
                 search = "" + search + "#page=";
             }
 
-            this.$nextTick(function() { // run the paginator after the next tick
+            this.$nextTick(function () { // run the paginator after the next tick
 
 
             });
         },
-        calculateInternalPage()  {
+        calculateInternalPage() {
 
-            this.internalTotalPages = Math.floor((this.data.length / this.pagination.per_page));
+            this.internalTotalPages = Math.ceil((this.data.length / this.pagination.per_page));
             this.internalCurrentPage = 1;
 
         }
