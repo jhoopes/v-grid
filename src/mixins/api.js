@@ -8,7 +8,7 @@ export default {
             }
 
             var vm = this;
-            this.$http.get(this.recordUrl, { 'page': page }).then(function(response) {
+            this.apiClient.get(this.recordUrl, { 'page': page }).then(function(response) {
 
                 if(typeof response.data.data != 'undefined') {
                     vm.records = response.data.data;
