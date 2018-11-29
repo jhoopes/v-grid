@@ -1,8 +1,10 @@
 <template>
     <div class="pagination m-4" v-if="pageCount > 1">
         <ul class="list-reset flex">
-            <li class="px-2 rounded" :class="previousClass">
-                <a @click="setCurrentPage(Math.max(1, currentPage-1))"
+            <li class="px-2 rounded" :class="previousClass"
+                @click="setCurrentPage(Math.max(1, currentPage-1))"
+            >
+                <a
                    aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
@@ -17,8 +19,10 @@
                     {{ page.number }}
                 </a><span v-if="page.number === null">...</span>
             </li>
-            <li :class="nextClass" class="px-2 rounded">
-                <a v-on:click="setCurrentPage(Math.min(pageCount, currentPage + 1))"
+            <li :class="nextClass" class="px-2 rounded"
+                v-on:click="setCurrentPage(Math.min(pageCount, currentPage + 1))"
+            >
+                <a
                    aria-label="Next"
                 >
                     <span aria-hidden="true">&raquo;</span>
