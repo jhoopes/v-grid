@@ -79,6 +79,12 @@
                 default() {
                     return {};
                 },
+            },
+            apiClient: {
+                type: Object,
+                default() {
+                    return axios;
+                }
             }
         },
 
