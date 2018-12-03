@@ -8,7 +8,7 @@
                 :page-count="totalPages"
                 @updatePageNumber="updatePagination"
             ></pagination>
-            <div class="text-right" :class="addButtonSize" v-if="allowAdd">
+            <div class="text-right" v-if="allowAdd">
                 <button @click="addRecord" class="btn btn-success"><i class="fa fa-plus"></i> {{ addButtonText }}</button>
             </div>
         </div>
@@ -60,6 +60,10 @@
                 type: Boolean,
                 default: false,
             },
+            addButtonText: {
+                type: String,
+                default: 'Add'
+            },
             baseRecordId: {
                 type: Number,
                 default: null
@@ -91,7 +95,6 @@
         data() {
             return {
                 uniqueId: '',
-                addButtonText: ''
             }
         },
 
