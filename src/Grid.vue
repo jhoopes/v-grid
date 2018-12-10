@@ -1,15 +1,21 @@
 <template>
 
-    <div :id="'grid-' + uniqueId ">
+    <div :id="'grid-' + uniqueId " class="grid">
+        <div v-if="allowAdd && addDisplay === 'top'" class="top-bar">
+            <button @click="addRecord" class="button"><i class="fa fa-plus"></i> {{ addButtonText }}</button>
+            <fa-icon icon="sync" v-if="refreshRecords" @click="refreshRecords"></fa-icon>
+        </div>
         <component :is="gridType" :records.sync="records" :record-type="recordType" :args="gridArgs"></component>
         <div class="flex justify-between controls">
-            <pagination
-                :current-page="currentPage"
-                :page-count="totalPages"
-                @updatePageNumber="updatePagination"
-            ></pagination>
-            <div class="text-right" v-if="allowAdd">
-                <button @click="addRecord" class="btn btn-success"><i class="fa fa-plus"></i> {{ addButtonText }}</button>
+            <div>
+                <pagination
+                        :current-page="currentPage"
+                        :page-count="totalPages"
+                        @updatePageNumber="updatePagination"
+                ></pagination>
+            </div>
+            <div class="text-right" v-if="allowAdd && addDisplay === 'bottom'">
+                <button @click="addRecord" class="button"><i class="fa fa-plus"></i> {{ addButtonText }}</button>
             </div>
         </div>
     </div>
@@ -60,9 +66,21 @@
                 type: Boolean,
                 default: false,
             },
+            addAction: {
+                type: Function,
+                default() {
+                    this.records.push({
+                        isNew: true
+                    });
+                }
+            },
             addButtonText: {
                 type: String,
                 default: 'Add'
+            },
+            addDisplay: {
+                type: String,
+                default: 'bottom'
             },
             baseRecordId: {
                 type: Number,
@@ -70,6 +88,10 @@
             },
             recordUrl: {
                 type: String,
+                default: null
+            },
+            refreshRecords: {
+                type: Function,
                 default: null
             },
             pagination: {
@@ -142,9 +164,7 @@
 
             },
             addRecord() {
-                this.records.push({
-                    isNew: true
-                });
+                this.addAction();
             },
             updatePagination(newPage) {
 

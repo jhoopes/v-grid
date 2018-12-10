@@ -1,4 +1,5 @@
 import Grid from './Grid.vue';
+import IsRow from './mixins/is_row';
 
 export default {
 
@@ -11,3 +12,4 @@ export default {
 
 }
 
+export { Grid, IsRow}
