@@ -9,7 +9,14 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="record in records" :is="recordType" :record.sync="record" :base-record-id="baseRecordId" v-on:remove="removeRecord(record, $event)" :args="args"></tr>
+                <tr
+                    v-for="record in records"
+                    :key="record.id"
+                    :is="recordType"
+                    :record.sync="record"
+                    :base-record-id="baseRecordId"
+                    v-on:remove="removeRecord(record, $event)"
+                    :args="args"></tr>
             </tbody>
         </table>
 
