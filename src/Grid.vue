@@ -22,6 +22,7 @@
 
 </template>
 <script>
+    import props from './mixins/grid/props';
     import api from './mixins/api';
     import pagination from './mixins/pagination';
     import tableView from './grid-views/Grid-TableView.vue'
@@ -32,106 +33,32 @@
 
         name: 'v-grid',
 
-        props: {
-            gridType: {
-                type: String,
-                default: 'tableView'
-            },
-            recordType: {
-                type: String,
-                default() {
-                    if(this.gridType == 'tableView') {
-                        return 'table-row';
-                    }
-
-                    return null;
-                },
-            },
-            headers: {
-                type: Array
-            },
-            data: {
-                type: [Object, Array],
-                default() {
-                    return {
-                        data: [],
-                        total: 0,
-                        per_page: 10,
-                        current_page: 1,
-                        last_page: 1
-                    }
-                }
-            },
-            allowAdd: {
-                type: Boolean,
-                default: false,
-            },
-            addAction: {
-                type: Function,
-                default() {
-                    this.records.push({
-                        isNew: true
-                    });
-                }
-            },
-            addButtonText: {
-                type: String,
-                default: 'Add'
-            },
-            addDisplay: {
-                type: String,
-                default: 'bottom'
-            },
-            baseRecordId: {
-                type: Number,
-                default: null
-            },
-            recordUrl: {
-                type: String,
-                default: null
-            },
-            refreshRecords: {
-                type: Function,
-                default: null
-            },
-            pagination: {
-                type: Object,
-                default() {
-                    return {}
-                }
-            },
-            gridArgs: {
-                type: Object,
-                default() {
-                    return {};
-                },
-            },
-            apiClient: {
-                type: Object,
-                default() {
-                    return axios;
-                }
-            }
-        },
-
         data() {
             return {
                 uniqueId: '',
+                gridData: {},
+            }
+        },
+
+        watch: {
+            data(newData) {
+                this.gridData = newData;
             }
         },
 
         computed: {
             records() {
-                if(typeof this.data.current_page !== 'undefined' &&
-                        this.data.current_page !== null &&
-                        typeof this.data.data !== 'undefined' &&
-                        this.data.data !== null) {
 
-                    return this.data.data;
+                if(typeof this.gridData.current_page !== 'undefined' &&
+                    this.gridData.current_page !== null &&
+                    typeof this.gridData.data !== 'undefined' &&
+                    this.gridData.data !== null) {
+
+                    return this.gridData.data;
                 } else if(this.internalPagination) {
                     return this.internalPage
                 }
-                return this.data;
+                return this.gridData;
             },
         },
 
@@ -141,10 +68,11 @@
             Pagination
         },
 
-        mixins: [ api, pagination ],
+        mixins: [ props,  api, pagination ],
 
         created() {
             this.uniqueId = generateUniqueId();
+            this.gridData = this.data;
         },
 
         mounted() {
@@ -170,7 +98,9 @@
 
                 if(this.internalPagination) {
                     this.internalCurrentPage = newPage;
-                }else {
+                } else if(this.recordUrl) {
+                    this.getRecordsFromAPI(newPage);
+                } else {
                     this.$emit('updatePagination', newPage);
                 }
 

@@ -7,21 +7,26 @@ export default {
                 page = 1;
             }
 
-            var vm = this;
-            this.apiClient.get(this.recordUrl, { 'page': page }).then(function(response) {
+            let params = {
+                page
+            };
+
+            Object.assign(params, this.recordUrlParams);
+
+            this.apiClient.get(this.recordUrl, {
+                params
+            }).then(response => {
 
                 if(typeof response.data.data != 'undefined') {
-                    vm.records = response.data.data;
-                    vm.current_page = response.data.current_page;
-                    vm.last_page = response.data.last_page;
-                    vm.per_page = response.data.per_page;
-                    vm.total = response.data.total;
-
-                    vm.setPagination();
+                    this.gridData = response.data;
+                    if(response.data.current_page) {
+                        this.internalCurrentPage = response.data.current_page;
+                    }
+                    this.setPagination();
                 }
 
             }, function(response) {
-                portal.notify('alert', {
+                window.notify('alert', {
                     'type': 'error',
                     message: response.data.message,
                     title: Lang.get('claims.error')

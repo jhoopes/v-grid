@@ -10,8 +10,8 @@ export default {
 
     computed: {
         canPaginate() {
-            if (typeof this.data.current_page !== 'undefined' &&
-                this.data.current_page !== null) {
+            if (typeof this.gridData.current_page !== 'undefined' &&
+                this.gridData.current_page !== null) {
                 return true;
             } else if (this.pagination.per_page) {
                 this.internalPagination = true;
@@ -21,8 +21,8 @@ export default {
             return false;
         },
         currentPage() {
-            if (this.data.current_page) {
-                return this.data.current_page;
+            if (this.gridData.current_page) {
+                return this.gridData.current_page;
             } else if (this.internalPagination) {
                 return this.internalCurrentPage
             }
@@ -30,8 +30,8 @@ export default {
             return 0;
         },
         totalPages() {
-            if (this.data.total) {
-                return this.data.total;
+            if (this.gridData.last_page) {
+                return this.gridData.last_page;
             } else if (this.internalPagination) {
                 return this.internalTotalPages
             }
@@ -39,21 +39,39 @@ export default {
             return 0;
         },
         internalPage() {
+            let perPage = null;
+            if(this.gridData.per_page) {
+                perPage = this.gridData.per_page
+            } else if(this.pagination.per_page) {
+                perPage = this.pagination.per_page
+            } else {
+                return // if we don't have a per page set, then we aren't paginating
+            }
+
+
             if (this.currentPage == 1) {
                 var start = 0;
             } else {
-                var start = (this.currentPage * this.pagination.per_page) - this.pagination.per_page;
+                var start = (this.currentPage * perPage) - perPage;
             }
 
             var end = null;
             if (this.currentPage !== this.totalPages) {
-                end = this.currentPage * this.pagination.per_page;
+                end = this.currentPage * perPage;
             }
 
-            if (end) {
-                return this.data.slice(start, end);
+            var data = [];
+            if(this.gridData.data) {
+                data = this.gridData.data;
             } else {
-                return this.data.slice(start);
+                data = this.gridData;
+            }
+
+
+            if (end) {
+                return data.slice(start, end);
+            } else {
+                return data.slice(start);
             }
         }
     },
