@@ -64,7 +64,7 @@
                 return name;
             },
             removeRecord(record, event) {
-                this.records.$remove(record);
+                this.$emit('removeRecord', record);
             }
         }
 
