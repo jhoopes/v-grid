@@ -5,7 +5,7 @@
             <button @click="addRecord" class="button"><i class="fa fa-plus"></i> {{ addButtonText }}</button>
             <fa-icon icon="sync" v-if="refreshRecords" @click="refreshRecords"></fa-icon>
         </div>
-        <component :is="gridType" :records.sync="records" :record-type="recordType" :args="gridArgs"></component>
+        <component :is="gridType" :records.sync="records" :record-type="recordType" :args="gridArgs" @removeRecord="removeRecord"></component>
         <div class="flex justify-between controls">
             <div>
                 <pagination
@@ -104,6 +104,9 @@
                     this.$emit('updatePagination', newPage);
                 }
 
+            },
+            removeRecord(record) {
+                this.$emit('removeRecord', record);
             }
         }
     }
