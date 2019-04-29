@@ -21,11 +21,11 @@ export default {
             };
 
             Object.assign(params, this.recordUrlParams);
-
+            this.loadingData = true;
             this.apiClient.get(this.recordUrl, {
                 params
             }).then(response => {
-
+                this.loadingData = false;
                 if(typeof response.data.data != 'undefined') {
                     this.gridData = response.data;
                     if(response.data.current_page) {
@@ -35,6 +35,7 @@ export default {
                 }
 
             }, function(response) {
+                this.loadingData = false;
                 window.notify('alert', {
                     'type': 'error',
                     message: response.data.message,

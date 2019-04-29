@@ -5,8 +5,13 @@
             <button @click="addRecord" class="button"><i class="fa fa-plus"></i> {{ addButtonText }}</button>
             <fa-icon icon="sync" v-if="refreshRecords" @click="refreshRecords"></fa-icon>
         </div>
-        <component :is="gridType" :records.sync="records" :record-type="recordType" :args="gridArgs" @removeRecord="removeRecord"></component>
-        <div class="flex justify-between controls">
+        <div v-show="!loadingData">
+            <component :is="gridType" :records.sync="records" :record-type="recordType" :args="gridArgs" @removeRecord="removeRecord"></component>
+        </div>
+        <div v-show="loadingData" style="min-height: 75vh; display: flex; align-items: center; justify-content: center;">
+            <span class="fa fa-spinner fa-spin fa-3x"></span>
+        </div>
+        <div class="flex justify-between controls" v-show="!loadingData">
             <div>
                 <pagination
                         :current-page="currentPage"
@@ -37,6 +42,7 @@
             return {
                 uniqueId: '',
                 gridData: {},
+                loadingData: false,
             }
         },
 
