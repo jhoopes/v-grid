@@ -1,21 +1,33 @@
 <template>
 
-    <div :id="'grid-' + uniqueId ">
-        <component :is="gridType" :records.sync="records" :record-type="recordType" :args="gridArgs"></component>
-        <div class="flex justify-between controls">
-            <pagination
-                :current-page="currentPage"
-                :page-count="totalPages"
-                @updatePageNumber="updatePagination"
-            ></pagination>
-            <div class="text-right" v-if="allowAdd">
-                <button @click="addRecord" class="btn btn-success"><i class="fa fa-plus"></i> {{ addButtonText }}</button>
+    <div :id="'grid-' + uniqueId " class="grid">
+        <div v-if="allowAdd && addDisplay === 'top'" class="top-bar">
+            <button @click="addRecord" class="button"><i class="fa fa-plus"></i> {{ addButtonText }}</button>
+            <fa-icon icon="sync" v-if="refreshRecords" @click="refreshRecords"></fa-icon>
+        </div>
+        <div v-show="!loadingData">
+            <component :is="gridType" :records.sync="records" :record-type="recordType" :args="gridArgs" @removeRecord="removeRecord"></component>
+        </div>
+        <div v-show="loadingData" style="min-height: 75vh; display: flex; align-items: center; justify-content: center;">
+            <span class="fa fa-spinner fa-spin fa-3x"></span>
+        </div>
+        <div class="flex justify-between controls" v-show="!loadingData">
+            <div>
+                <pagination
+                        :current-page="currentPage"
+                        :page-count="totalPages"
+                        @updatePageNumber="updatePagination"
+                ></pagination>
+            </div>
+            <div class="text-right" v-if="allowAdd && addDisplay === 'bottom'">
+                <button @click="addRecord" class="button"><i class="fa fa-plus"></i> {{ addButtonText }}</button>
             </div>
         </div>
     </div>
 
 </template>
 <script>
+    import props from './mixins/grid/props';
     import api from './mixins/api';
     import pagination from './mixins/pagination';
     import tableView from './grid-views/Grid-TableView.vue'
@@ -26,90 +38,33 @@
 
         name: 'v-grid',
 
-        props: {
-            gridType: {
-                type: String,
-                default: 'tableView'
-            },
-            recordType: {
-                type: String,
-                default() {
-                    if(this.gridType == 'tableView') {
-                        return 'table-row';
-                    }
-
-                    return null;
-                },
-            },
-            headers: {
-                type: Array
-            },
-            data: {
-                type: [Object, Array],
-                default() {
-                    return {
-                        data: [],
-                        total: 0,
-                        per_page: 10,
-                        current_page: 1,
-                        last_page: 1
-                    }
-                }
-            },
-            allowAdd: {
-                type: Boolean,
-                default: false,
-            },
-            addButtonText: {
-                type: String,
-                default: 'Add'
-            },
-            baseRecordId: {
-                type: Number,
-                default: null
-            },
-            recordUrl: {
-                type: String,
-                default: null
-            },
-            pagination: {
-                type: Object,
-                default() {
-                    return {}
-                }
-            },
-            gridArgs: {
-                type: Object,
-                default() {
-                    return {};
-                },
-            },
-            apiClient: {
-                type: Object,
-                default() {
-                    return axios;
-                }
-            }
-        },
-
         data() {
             return {
                 uniqueId: '',
+                gridData: {},
+                loadingData: false,
+            }
+        },
+
+        watch: {
+            data(newData) {
+                this.gridData = newData;
             }
         },
 
         computed: {
             records() {
-                if(typeof this.data.current_page !== 'undefined' &&
-                        this.data.current_page !== null &&
-                        typeof this.data.data !== 'undefined' &&
-                        this.data.data !== null) {
 
-                    return this.data.data;
+                if(typeof this.gridData.current_page !== 'undefined' &&
+                    this.gridData.current_page !== null &&
+                    typeof this.gridData.data !== 'undefined' &&
+                    this.gridData.data !== null) {
+
+                    return this.gridData.data;
                 } else if(this.internalPagination) {
                     return this.internalPage
                 }
-                return this.data;
+                return this.gridData;
             },
         },
 
@@ -119,10 +74,11 @@
             Pagination
         },
 
-        mixins: [ api, pagination ],
+        mixins: [ props,  api, pagination ],
 
         created() {
             this.uniqueId = generateUniqueId();
+            this.gridData = this.data;
         },
 
         mounted() {
@@ -142,18 +98,21 @@
 
             },
             addRecord() {
-                this.records.push({
-                    isNew: true
-                });
+                this.addAction();
             },
             updatePagination(newPage) {
 
                 if(this.internalPagination) {
                     this.internalCurrentPage = newPage;
-                }else {
+                } else if(this.recordUrl) {
+                    this.getRecordsFromAPI(newPage);
+                } else {
                     this.$emit('updatePagination', newPage);
                 }
 
+            },
+            removeRecord(record) {
+                this.$emit('removeRecord', record);
             }
         }
     }
