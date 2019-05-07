@@ -6,7 +6,17 @@
             <fa-icon icon="sync" v-if="refreshRecords" @click="refreshRecords"></fa-icon>
         </div>
         <div v-show="!loadingData">
-            <component :is="gridType" :records.sync="records" :record-type="recordType" :args="gridArgs" @removeRecord="removeRecord"></component>
+            <component
+                    :is="gridType"
+                    :records.sync="records"
+                    :record-type="recordType"
+                    :args="gridArgs"
+                    :selected-records="selectedRecords"
+                    :records-are-selectable="bulkActions.length > 0"
+                    @record-selected="addRecordToSelections"
+                    @record-unselected="removeRecordFromSelections"
+                    @removeRecord="removeRecord"
+            ></component>
         </div>
         <div v-show="loadingData" style="min-height: 75vh; display: flex; align-items: center; justify-content: center;">
             <span class="fa fa-spinner fa-spin fa-3x"></span>
@@ -43,6 +53,7 @@
                 uniqueId: '',
                 gridData: {},
                 loadingData: false,
+                selectedRecords: [],
             }
         },
 
@@ -113,6 +124,17 @@
             },
             removeRecord(record) {
                 this.$emit('removeRecord', record);
+            },
+            addRecordToSelections(record) {
+                this.selectedRecords.push(record);
+            },
+            removeRecordFromSelections(record) {
+
+                let recordIndex = this.selectedRecords.findIndex(selectedRecord => {
+                    return selectedRecord.id === record.id;
+                });
+
+                this.selectedRecords.splice(recordIndex, 1);
             }
         }
     }

@@ -8,6 +8,13 @@
                 :record="record"
                 :base-record-id="baseRecordId"
                 v-on:remove="removeRecord(record, $event)"
+                :class="{
+                    'selected' : selectedRecords.find(r => r.id === record.id),
+                    'cursor-pointer' : recordsAreSelectable
+                }"
+                @click.native.capture="handeSelectionClick(record)"
+                @record-selected="selectRecord(record)"
+                @record-unselected="deselectRecord(record)"
                 :args="args">
 
         </div>
@@ -18,21 +25,37 @@
 
 </template>
 <script>
+    import is_grid_view from './../mixins/is_grid_view';
+
     export default {
 
-        props: ['records', 'recordType', 'args'],
+        mixins: [is_grid_view],
 
         data() {
             return {
                 baseRecordId: 0
+
             }
         },
 
-        ready() {
+        mounted() {
             this.baseRecordId = this.$parent.baseRecordId;
         },
 
         methods: {
+            handeSelectionClick(record) {
+                // only run section if records are selectable through a simple click
+                if(!this.recordsAreSelectable) {
+                    return;
+                }
+                this.selectRecord(record);
+            },
+            selectRecord(record) {
+                this.$emit('record-selected', record);
+            },
+            deselectRecord(record) {
+                this.$emit('record-unselected', record);
+            },
             removeRecord(record, event) {
                 this.$emit('removeRecord', record);
             }
