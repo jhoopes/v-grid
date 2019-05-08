@@ -48,7 +48,16 @@
                 if(!this.recordsAreSelectable) {
                     return;
                 }
-                this.selectRecord(record);
+
+                let foundRecord = this.selectedRecords.find(rec => {
+                    return rec.id === record.id;
+                });
+
+                if(foundRecord) {
+                    this.deselectRecord(record);
+                }else {
+                    this.selectRecord(record);
+                }
             },
             selectRecord(record) {
                 this.$emit('record-selected', record);

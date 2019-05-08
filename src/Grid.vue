@@ -1,9 +1,22 @@
 <template>
 
     <div :id="'grid-' + uniqueId " class="grid">
-        <div v-if="allowAdd && addDisplay === 'top'" class="top-bar">
-            <button @click="addRecord" class="button"><i class="fa fa-plus"></i> {{ addButtonText }}</button>
-            <fa-icon icon="sync" v-if="refreshRecords" @click="refreshRecords"></fa-icon>
+        <div class="top-bar flex justify-end">
+            <button @click="addRecord" class="button" v-if="allowAdd && addDisplay === 'top'">
+                <i class="fa fa-plus"></i> {{ addButtonText }}
+            </button>
+<!--            <font-awesome-icon :icon="faIcons.faSync" v-if="refreshRecords" @click="refreshRecords"></font-awesome-icon>-->
+            <div v-if="selectedRecords.length > 0">
+                <multi-select
+                    :options="bulkActions"
+                    track-by="name"
+                    label="title"
+                    placeholder="Select Action"
+                    @input="runBulkAction"
+                    class="bulk-options-selector"
+                    :show-labels="false"
+                ></multi-select>
+            </div>
         </div>
         <div v-show="!loadingData">
             <component
@@ -44,6 +57,13 @@
     import divRow from './grid-views/Grid-DivRow.vue'
     import Pagination from './Pagination.vue';
     import { generateUniqueId } from './mixins/utils';
+    import {
+        faPlus,
+        faSync,
+    } from '@fortawesome/free-solid-svg-icons'
+    import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
+
+    import MultiSelect from 'vue-multiselect';
     export default {
 
         name: 'v-grid',
@@ -54,6 +74,10 @@
                 gridData: {},
                 loadingData: false,
                 selectedRecords: [],
+                faIcons:{
+                    faPlus,
+                    faSync
+                }
             }
         },
 
@@ -80,9 +104,11 @@
         },
 
         components: {
+            FontAwesomeIcon,
             tableView,
             divRow,
-            Pagination
+            Pagination,
+            MultiSelect
         },
 
         mixins: [ props,  api, pagination ],
@@ -135,6 +161,11 @@
                 });
 
                 this.selectedRecords.splice(recordIndex, 1);
+            },
+            runBulkAction(action) {
+
+                console.log(action);
+                action.action(this.selectedRecords);
             }
         }
     }
