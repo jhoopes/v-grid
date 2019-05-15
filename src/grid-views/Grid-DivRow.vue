@@ -12,7 +12,7 @@
                     'selected' : selectedRecords.find(r => r.id === record.id),
                     'cursor-pointer' : recordsAreSelectable
                 }"
-                @click.native.capture="handeSelectionClick(record)"
+                @click.native="handeSelectionClick(record)"
                 @record-selected="selectRecord(record)"
                 @record-unselected="deselectRecord(record)"
                 :args="args">
