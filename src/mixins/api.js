@@ -3,6 +3,8 @@ export default {
 
     watch: {
         recordUrlParams(newParams) {
+            this.sortBy = null;
+            this.currentFilter = null;
             if(typeof this.recordUrl !== 'undefined' && this.recordUrl !== null) {
                 this.getRecordsFromAPI();
             }
@@ -19,6 +21,14 @@ export default {
             let params = {
                 page
             };
+
+            if(this.sortBy && this.sortBy.by) {
+                params.sortBy = this.sortBy.by;
+            }
+
+            if(this.currentFilter && this.currentFilter.params) {
+                Object.assign(params, this.currentFilter.params);
+            }
 
             Object.assign(params, this.recordUrlParams);
             this.loadingData = true;

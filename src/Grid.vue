@@ -17,6 +17,30 @@
                     :show-labels="false"
                 ></multi-select>
             </div>
+            <div v-if="filters.length > 0">
+                <multi-select
+                    :options="filters"
+                    track-by="name"
+                    label="title"
+                    placeholder="Select filter"
+                    :value="currentFilter"
+                    @input="runFilter"
+                    class="bulk-options-selector"
+                    :show-labels="false"
+                ></multi-select>
+            </div>
+            <div v-if="sorts.length > 0">
+                <multi-select
+                        :options="sorts"
+                        track-by="name"
+                        label="title"
+                        placeholder="Select field to sort by"
+                        :value="sortBy"
+                        @input="runSort"
+                        class="bulk-options-selector"
+                        :show-labels="false"
+                ></multi-select>
+            </div>
         </div>
         <div v-show="!loadingData">
             <component
@@ -74,6 +98,8 @@
                 gridData: {},
                 loadingData: false,
                 selectedRecords: [],
+                sortBy: null,
+                currentFilter: null,
                 faIcons:{
                     faPlus,
                     faSync
@@ -163,9 +189,56 @@
                 this.selectedRecords.splice(recordIndex, 1);
             },
             runBulkAction(action) {
-
-                console.log(action);
                 action.action(this.selectedRecords);
+            },
+            runFilter(filter) {
+
+                if(!filter) {
+                    // reset filter
+                    this.currentFilter = null;
+                    this.$emit('updateFilter', null);
+                    if(this.recordUrl) {
+                        this.getRecordsFromAPI();
+                    }
+                    return;
+                }
+
+                if(!filter.params) {
+                    console.error('Invalid filter option');
+                    return;
+                }
+
+                this.currentFilter = filter;
+                this.$emit('updateFilter', filter);
+                if(this.recordUrl) {
+                    this.getRecordsFromAPI();
+                }
+
+            },
+            runSort(sort) {
+
+                if(!sort) {
+                    // reset sort
+                    this.sortBy = null;
+                    this.$emit('updateSort', null);
+                    if(this.recordUrl) {
+                        this.getRecordsFromAPI();
+                    }
+                    return;
+                }
+
+                if(typeof sort.action === 'function') {
+                    sort.action();
+                }else if(!sort.by) {
+                    console.error('invalid sort option');
+                    return;
+                }
+
+                this.sortBy = sort;
+                if(this.recordUrl) {
+                    this.getRecordsFromAPI();
+                }
+                this.$emit('updateSort', sort);
             }
         }
     }

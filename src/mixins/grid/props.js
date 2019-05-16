@@ -97,7 +97,9 @@ export default {
             type: Function,
             default() {
                 return () => {
-
+                    if(this.recordUrl) {
+                        this.getRecordsFromAPI();
+                    }
                 }
             }
         },
@@ -112,7 +114,27 @@ export default {
         bulkActions: {
             type: Array,
             default() {
-                return null
+                return []
+            }
+        },
+
+        /**
+         * An array of filters
+         */
+        filters: {
+            type: Array,
+            default() {
+                return [];
+            }
+        },
+
+        /**
+         *
+         */
+        sorts: {
+            type: Array,
+            default() {
+                return [];
             }
         },
 
