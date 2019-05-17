@@ -1,12 +1,59 @@
 <template>
 
     <div :id="'grid-' + uniqueId " class="grid">
-        <div v-if="allowAdd && addDisplay === 'top'" class="top-bar">
-            <button @click="addRecord" class="button"><i class="fa fa-plus"></i> {{ addButtonText }}</button>
-            <fa-icon icon="sync" v-if="refreshRecords" @click="refreshRecords"></fa-icon>
+        <div class="top-bar flex justify-end">
+            <button @click="addRecord" class="button" v-if="allowAdd && addDisplay === 'top'">
+                <i class="fa fa-plus"></i> {{ addButtonText }}
+            </button>
+<!--            <font-awesome-icon :icon="faIcons.faSync" v-if="refreshRecords" @click="refreshRecords"></font-awesome-icon>-->
+            <div v-if="selectedRecords.length > 0">
+                <multi-select
+                    :options="bulkActions"
+                    track-by="name"
+                    label="title"
+                    placeholder="Select Action"
+                    @input="runBulkAction"
+                    class="bulk-options-selector"
+                    :show-labels="false"
+                ></multi-select>
+            </div>
+            <div v-if="filters.length > 0">
+                <multi-select
+                    :options="filters"
+                    track-by="name"
+                    label="title"
+                    placeholder="Select filter"
+                    :value="currentFilter"
+                    @input="runFilter"
+                    class="bulk-options-selector"
+                    :show-labels="false"
+                ></multi-select>
+            </div>
+            <div v-if="sorts.length > 0">
+                <multi-select
+                        :options="sorts"
+                        track-by="name"
+                        label="title"
+                        placeholder="Select field to sort by"
+                        :value="sortBy"
+                        @input="runSort"
+                        class="bulk-options-selector"
+                        :show-labels="false"
+                ></multi-select>
+            </div>
         </div>
         <div v-show="!loadingData">
-            <component :is="gridType" :records.sync="records" :record-type="recordType" :args="gridArgs" @removeRecord="removeRecord"></component>
+            <component
+                    :is="gridType"
+                    :records.sync="records"
+                    :record-type="recordType"
+                    :args="gridArgs"
+                    :selected-records="selectedRecords"
+                    :records-are-selectable="bulkActions.length > 0"
+                    @record-selected="addRecordToSelections"
+                    @record-unselected="removeRecordFromSelections"
+                    @removeRecord="removeRecord"
+            ></component>
         </div>
         <div v-show="loadingData" style="min-height: 75vh; display: flex; align-items: center; justify-content: center;">
             <span class="fa fa-spinner fa-spin fa-3x"></span>
@@ -34,6 +81,13 @@
     import divRow from './grid-views/Grid-DivRow.vue'
     import Pagination from './Pagination.vue';
     import { generateUniqueId } from './mixins/utils';
+    import {
+        faPlus,
+        faSync,
+    } from '@fortawesome/free-solid-svg-icons'
+    import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
+
+    import MultiSelect from 'vue-multiselect';
     export default {
 
         name: 'v-grid',
@@ -43,6 +97,13 @@
                 uniqueId: '',
                 gridData: {},
                 loadingData: false,
+                selectedRecords: [],
+                sortBy: null,
+                currentFilter: null,
+                faIcons:{
+                    faPlus,
+                    faSync
+                }
             }
         },
 
@@ -69,9 +130,11 @@
         },
 
         components: {
+            FontAwesomeIcon,
             tableView,
             divRow,
-            Pagination
+            Pagination,
+            MultiSelect
         },
 
         mixins: [ props,  api, pagination ],
@@ -113,6 +176,75 @@
             },
             removeRecord(record) {
                 this.$emit('removeRecord', record);
+            },
+            addRecordToSelections(record) {
+                this.selectedRecords.push(record);
+            },
+            removeRecordFromSelections(record) {
+
+                let recordIndex = this.selectedRecords.findIndex(selectedRecord => {
+                    return selectedRecord.id === record.id;
+                });
+
+                this.selectedRecords.splice(recordIndex, 1);
+            },
+            runBulkAction(action) {
+                action.action(this.selectedRecords);
+
+                if(this.recordUrl && this.updateAfterBulkAction) {
+                    this.getRecordsFromAPI();
+                }
+                this.$emit('actionRun', action);
+                this.selectedRecords = [];
+            },
+            runFilter(filter) {
+
+                if(!filter) {
+                    // reset filter
+                    this.currentFilter = null;
+                    this.$emit('updateFilter', null);
+                    if(this.recordUrl) {
+                        this.getRecordsFromAPI();
+                    }
+                    return;
+                }
+
+                if(!filter.params) {
+                    console.error('Invalid filter option');
+                    return;
+                }
+
+                this.currentFilter = filter;
+                this.$emit('updateFilter', filter);
+                if(this.recordUrl) {
+                    this.getRecordsFromAPI();
+                }
+
+            },
+            runSort(sort) {
+
+                if(!sort) {
+                    // reset sort
+                    this.sortBy = null;
+                    this.$emit('updateSort', null);
+                    if(this.recordUrl) {
+                        this.getRecordsFromAPI();
+                    }
+                    return;
+                }
+
+                if(typeof sort.action === 'function') {
+                    sort.action();
+                }else if(!sort.by) {
+                    console.error('invalid sort option');
+                    return;
+                }
+
+                this.sortBy = sort;
+                if(this.recordUrl) {
+                    this.getRecordsFromAPI();
+                }
+                this.$emit('updateSort', sort);
             }
         }
     }

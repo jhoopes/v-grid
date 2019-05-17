@@ -20,6 +20,14 @@ export default {
                 page
             };
 
+            if(this.sortBy && this.sortBy.by) {
+                params.sortBy = this.sortBy.by;
+            }
+
+            if(this.currentFilter && this.currentFilter.params) {
+                Object.assign(params, this.currentFilter.params);
+            }
+
             Object.assign(params, this.recordUrlParams);
             this.loadingData = true;
             this.apiClient.get(this.recordUrl, {

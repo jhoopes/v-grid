@@ -97,11 +97,61 @@ export default {
             type: Function,
             default() {
                 return () => {
-
+                    if(this.recordUrl) {
+                        this.getRecordsFromAPI();
+                    }
                 }
             }
         },
 
+        /**
+         * An array of objects to define bulk actions.
+         *
+         * The addition of actions will add simple selection actions, however, if your row contains complex functionality
+         * it is usually better use the selfSelection functionality in order allow them to select themselves, otherwise
+         * vue click events may overlap each other
+         */
+        bulkActions: {
+            type: Array,
+            default() {
+                return []
+            }
+        },
+
+        updateAfterBulkAction: {
+            type: Boolean,
+            default: true,
+        },
+
+        /**
+         * An array of filters
+         */
+        filters: {
+            type: Array,
+            default() {
+                return [];
+            }
+        },
+
+        /**
+         *
+         */
+        sorts: {
+            type: Array,
+            default() {
+                return [];
+            }
+        },
+
+        /**
+         * Instead of using the default method for clicking the entire row which will 'select' it, the rows
+         * can emit an event an even for 'bulk-selected' of a boolean for true/false if selection is part of the row's
+         * functionality
+         */
+        rowsSelfSelect: {
+            type: Boolean,
+            default: false,
+        },
 
 
         pagination: {
