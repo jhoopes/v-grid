@@ -3,8 +3,6 @@ export default {
 
     watch: {
         recordUrlParams(newParams) {
-            this.sortBy = null;
-            this.currentFilter = null;
             if(typeof this.recordUrl !== 'undefined' && this.recordUrl !== null) {
                 this.getRecordsFromAPI();
             }

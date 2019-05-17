@@ -190,6 +190,12 @@
             },
             runBulkAction(action) {
                 action.action(this.selectedRecords);
+
+                if(this.recordUrl && this.updateAfterBulkAction) {
+                    this.getRecordsFromAPI();
+                }
+                this.$emit('actionRun', action);
+                this.selectedRecords = [];
             },
             runFilter(filter) {
 

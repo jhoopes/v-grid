@@ -118,6 +118,11 @@ export default {
             }
         },
 
+        updateAfterBulkAction: {
+            type: Boolean,
+            default: true,
+        },
+
         /**
          * An array of filters
          */
