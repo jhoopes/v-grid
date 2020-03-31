@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/jhoopes/v-grid#readme",
   "dependencies": {
-    "axios": "^0.16.2",
+    "axios": "^0.18.1",
     "tempusdominus-bootstrap-3": "^5.0.0-alpha9"
   },
   "devDependencies": {
