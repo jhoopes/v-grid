@@ -42,13 +42,13 @@ export default {
                     this.setPagination();
                 }
 
-            }, function(response) {
+            }, error => {
                 this.loadingData = false;
-                window.notify('alert', {
-                    'type': 'error',
-                    message: response.data.message,
-                    title: Lang.get('claims.error')
-                });
+
+                if(!error.data) {
+                    console.log(error);
+                    return;
+                }
             });
         },
     }

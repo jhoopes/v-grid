@@ -98,6 +98,7 @@ export default {
             default() {
                 return () => {
                     if(this.recordUrl) {
+                        this.loadingData = true;
                         this.getRecordsFromAPI();
                     }
                 }

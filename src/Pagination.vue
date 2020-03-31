@@ -12,10 +12,9 @@
             <li v-for="page in pages"
                 class="px-2 cursor-pointer"
                 :class="paginationItemClass(page)"
+                @click="setCurrentPage(page.number)"
             >
-                <a v-if="page.number"
-                   @click="setCurrentPage(page.number)"
-                >
+                <a v-if="page.number">
                     {{ page.number }}
                 </a><span v-if="page.number === null">...</span>
             </li>
@@ -29,6 +28,33 @@
                 </a>
             </li>
         </ul>
+        <transition
+                enter-active-class="animated faster fadeIn"
+                leave-active-class="animated faster fadeOut"
+        >
+            <div class="fixed z-50 w-full h-full top-0 left-0 flex items-center justify-center" v-if="showPageSelector">
+                <div class="absolute w-full h-full bg-grey-darker opacity-50"></div>
+                <div class="animated fadeInUp md:relative align-top m-auto justify-end md:justify-center px-8 bg-white md:rounded w-full md:shadow flex flex-col"
+                     :style="'width: 50%'"
+                >
+                    <h2 class="text-4xl text-center font-hairline md:leading-loose text-grey-darker md:mt-2 mb-8">
+                        Select page
+                    </h2>
+                    <div class="text-xl leading-normal mb-8 form-group flex justify-center items-center">
+                        <label>Page #</label>
+                        <input type="number" class="p-2 mx-2 border rounded" :max="pageCount" v-model="pageSelectorPageNum" />
+                    </div>
+                    <div class="inline-flex justify-center my-4">
+                        <button @click="setCurrentPage(pageSelectorPageNum)" class="button">
+                            Jump to Page
+                        </button>
+                    </div>
+                    <span @click="showPageSelector = false" class="absolute top-0 right-0 pt-4 px-4">
+                        <svg class="h-12 w-12 text-grey hover:text-grey-darkest" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+                    </span>
+                </div>
+            </div>
+        </transition>
     </div>
 </template>
 <script>
@@ -42,6 +68,14 @@
             pageCount: {
                 required: true,
                 type: Number
+            }
+        },
+
+
+        data() {
+            return {
+                showPageSelector: false,
+                pageSelectorPageNum: null,
             }
         },
 
@@ -117,6 +151,14 @@
 
             },
             setCurrentPage(newPageNumber) {
+
+                if(!newPageNumber) {
+                    this.showPageSelector = true;
+                    return;
+                }
+
+                this.pageSelectorPageNum = false;
+                this.showPageSelector = false;
                 this.$emit('updatePageNumber', newPageNumber);
             }
         }

@@ -56,7 +56,7 @@
             ></component>
         </div>
         <div v-show="loadingData" style="min-height: 75vh; display: flex; align-items: center; justify-content: center;">
-            <span class="fa fa-spinner fa-spin fa-3x"></span>
+            <font-awesome-icon :icon="faIcons.faSpinner" :spin="true" size="3x"></font-awesome-icon>
         </div>
         <div class="flex justify-between controls" v-show="!loadingData">
             <div>
@@ -84,6 +84,7 @@
     import {
         faPlus,
         faSync,
+        faSpinner,
     } from '@fortawesome/free-solid-svg-icons'
     import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 
@@ -102,7 +103,8 @@
                 currentFilter: null,
                 faIcons:{
                     faPlus,
-                    faSync
+                    faSync,
+                    faSpinner
                 }
             }
         },

@@ -25,8 +25,9 @@
     "tempusdominus-bootstrap-3": "^5.0.0-alpha9"
   },
   "devDependencies": {
-    "@fortawesome/free-solid-svg-icons": "^5.2.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.2",
+    "@fortawesome/free-regular-svg-icons": "^5.2.0",
+    "@fortawesome/free-solid-svg-icons": "^5.2.0",
     "@fortawesome/vue-fontawesome": "^0.1.1",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
