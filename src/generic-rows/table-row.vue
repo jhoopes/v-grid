@@ -1,7 +1,7 @@
 <template>
     <tr>
-        <td v-for="key in rowKeys" class="px-2">
-            {{ record[key] }}
+        <td v-for="value in record" class="px-2">
+            {{ value }}
         </td>
     </tr>
 </template>
@@ -18,14 +18,5 @@
             },
         },
 
-        data() {
-            return {
-                rowKeys: []
-            }
-        },
-
-        created() {
-            this.rowKeys = Object.keys(this.record);
-        }
     }
 </script>

@@ -40,6 +40,8 @@ export default {
                         this.internalCurrentPage = response.data.current_page;
                     }
                     this.setPagination();
+                } else {
+                    this.gridData = response.data;
                 }
 
             }, error => {

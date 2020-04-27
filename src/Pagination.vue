@@ -34,10 +34,10 @@
         >
             <div class="fixed z-50 w-full h-full top-0 left-0 flex items-center justify-center" v-if="showPageSelector">
                 <div class="absolute w-full h-full bg-grey-darker opacity-50"></div>
-                <div class="animated fadeInUp md:relative align-top m-auto justify-end md:justify-center px-8 bg-white md:rounded w-full md:shadow flex flex-col"
+                <div class="animated fadeInUp relative align-top m-auto justify-center px-8 bg-white rounded w-full shadow flex flex-col"
                      :style="'width: 50%'"
                 >
-                    <h2 class="text-4xl text-center font-hairline md:leading-loose text-grey-darker md:mt-2 mb-8">
+                    <h2 class="text-4xl text-center font-hairline leading-loose text-grey-darker mt-2 mb-8">
                         Select page
                     </h2>
                     <div class="text-xl leading-normal mb-8 form-group flex justify-center items-center">
