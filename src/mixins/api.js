@@ -22,6 +22,10 @@ export default {
 
             if(this.sortBy && this.sortBy.by) {
                 params.sortBy = this.sortBy.by;
+
+                if(this.sortBy.dir) {
+                    params.sortDir = this.sortBy.dir;
+                }
             }
 
             if(this.currentFilter && this.currentFilter.params) {
