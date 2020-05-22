@@ -16,6 +16,7 @@
                     :record.sync="record"
                     :base-record-id="baseRecordId"
                     v-on:remove="removeRecord(record, $event)"
+                    @refreshRecords="$parent.runRefresh()"
                     :args="args"></tr>
             </tbody>
         </table>

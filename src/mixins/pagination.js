@@ -92,11 +92,6 @@ export default {
             } else {
                 search = "" + search + "#page=";
             }
-
-            this.$nextTick(function () { // run the paginator after the next tick
-
-
-            });
         },
         calculateInternalPage() {
 

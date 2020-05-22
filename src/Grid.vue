@@ -5,7 +5,9 @@
             <button @click="addRecord" class="button" v-if="allowAdd && addDisplay === 'top'">
                 <i class="fa fa-plus"></i> {{ addButtonText }}
             </button>
-<!--            <font-awesome-icon :icon="faIcons.faSync" v-if="refreshRecords" @click="refreshRecords"></font-awesome-icon>-->
+            <button v-if="allowRefresh" @click="runRefresh">
+                <font-awesome-icon :icon="faIcons.faSync"></font-awesome-icon>
+            </button>
             <div v-if="selectedRecords.length > 0">
                 <multi-select
                     :options="bulkActions"
@@ -112,6 +114,17 @@
         watch: {
             data(newData) {
                 this.gridData = newData;
+            },
+            externalLoading(newLoading) {
+                this.loadingData = newLoading;
+            },
+            queueRefresh(newRefresh) {
+
+                if(newRefresh) {
+                    this.runRefresh();
+                }
+
+                this.$emit('update:queueRefresh', false);
             }
         },
 
@@ -189,6 +202,18 @@
                 });
 
                 this.selectedRecords.splice(recordIndex, 1);
+            },
+            runRefresh() {
+
+                if(this.refreshRecords) {
+                    this.refreshRecords();
+                    return;
+                }
+
+                if(this.recordUrl) {
+                    this.loadingData = true;
+                    this.getRecordsFromAPI();
+                }
             },
             runBulkAction(action) {
                 action.action(this.selectedRecords);

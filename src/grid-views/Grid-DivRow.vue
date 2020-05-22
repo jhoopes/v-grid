@@ -1,6 +1,16 @@
 <template>
 
     <div id="records">
+
+        <table class="table table-hover">
+            <tr>
+                <th v-for="headerName in tableHeaders">
+                    {{ getHeaderName(headerName) }}
+                </th>
+            </tr>
+        </table>
+
+
         <div
                 v-for="record in records"
                 :key="record.id"
@@ -15,6 +25,7 @@
                 @click.native="handeSelectionClick(record)"
                 @record-selected="selectRecord(record)"
                 @record-unselected="deselectRecord(record)"
+                @refreshRecords="$parent.runRefresh()"
                 :args="args">
 
         </div>
@@ -33,16 +44,20 @@
 
         data() {
             return {
-                baseRecordId: 0
-
+                baseRecordId: 0,
+                tableHeaders: [] // if headers are passed in a fake table will be made
             }
         },
 
-        mounted() {
+        created() {
             this.baseRecordId = this.$parent.baseRecordId;
+            this.tableHeaders = this.$parent.headers;
         },
 
         methods: {
+            getHeaderName(name) {
+                return name;
+            },
             handeSelectionClick(record) {
                 // only run section if records are selectable through a simple click
                 if(!this.recordsAreSelectable) {

@@ -91,18 +91,21 @@ export default {
             }
         },
 
+        allowRefresh: {
+            type: Boolean,
+            default: false
+        },
+
 
         // Refresh records function.  This is the function to refresh the records for the existing parameters
         refreshRecords: {
             type: Function,
-            default() {
-                return () => {
-                    if(this.recordUrl) {
-                        this.loadingData = true;
-                        this.getRecordsFromAPI();
-                    }
-                }
-            }
+        },
+
+        /** Whether we are loading data externally to simulate loadinging within component **/
+        externalLoading: {
+            type: Boolean,
+            default: false,
         },
 
         /**
@@ -177,6 +180,19 @@ export default {
                 return axios;
             }
         },
+
+        /**
+         * Whether or not we parse the api response returned through using the api client as a JSON:API response
+         */
+        useJsonApi: {
+            type: Boolean,
+            default: false,
+        },
+
+        queueRefresh: {
+            type: Boolean,
+            default: false,
+        }
     },
 
 

@@ -1,3 +1,5 @@
+import Parser from './../classes/jsonapi_parser';
+
 export default {
 
 
@@ -38,6 +40,17 @@ export default {
                 params
             }).then(response => {
                 this.loadingData = false;
+
+                if(this.useJsonApi) {
+                    var apiResponse = Parser.parseJSONAPIResponse(response.data);
+                    this.gridData = apiResponse;
+                    if(apiResponse.current_page) {
+                        this.internalCurrentPage = apiResponse.current_page
+                    }
+                    this.setPagination();
+                    return;
+                }
+
                 if(typeof response.data.data != 'undefined') {
                     this.gridData = response.data;
                     if(response.data.current_page) {
