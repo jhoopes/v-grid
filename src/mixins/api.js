@@ -4,10 +4,13 @@ export default {
 
 
     watch: {
-        recordUrlParams(newParams) {
-            if(typeof this.recordUrl !== 'undefined' && this.recordUrl !== null) {
-                this.getRecordsFromAPI();
-            }
+        recordUrlParams: {
+            handler: function (newParams) {
+                if(typeof this.recordUrl !== 'undefined' && this.recordUrl !== null) {
+                    this.getRecordsFromAPI();
+                }
+            },
+            deep: true,
         }
     },
 

@@ -22,6 +22,10 @@ class Parser {
 
                 resource.relationships[relKey].data.forEach(relRecord => {
 
+                    if(!relRecord || !relRecord.type) {
+                        return;
+                    }
+
                     var relatedRecord;
                     if(!included) {
                         relationshipSet.push(relRecord);
@@ -44,14 +48,17 @@ class Parser {
                 // if the relationship is a single object, then it's a one to one relationship, and the data object is the relationship record
 
                 let relRecord = resource.relationships[relKey].data;
-                relationshipSet = relRecord;
-                if(included) {
-                    let relatedRecord = included.find(include => {
-                        return include.type === relRecord.type && include.id === relRecord.id;
-                    });
 
-                    if (relatedRecord) {
-                        relationshipSet = this.parseSingleResource(relatedRecord);
+                if(relRecord) {
+                    relationshipSet = relRecord;
+                    if(included) {
+                        let relatedRecord = included.find(include => {
+                            return include.type === relRecord.type && include.id === relRecord.id;
+                        });
+
+                        if (relatedRecord) {
+                            relationshipSet = this.parseSingleResource(relatedRecord);
+                        }
                     }
                 }
             }
