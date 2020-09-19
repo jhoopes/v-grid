@@ -167,7 +167,7 @@ export default {
     // ability to define a custom apiClient instead of using the default fetch
     apiClient: {
       default() {
-        return fetch;
+        return window.fetch;
       }
     },
 
