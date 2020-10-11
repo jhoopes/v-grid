@@ -68,8 +68,7 @@ export default {
             this.loadingData = false;
 
             if (!error.data) {
-              console.log(error);
-              return;
+              throw new Error(error);
             }
           }
         );

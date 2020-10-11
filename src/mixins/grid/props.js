@@ -164,10 +164,34 @@ export default {
       }
     },
 
-    // ability to define a custom apiClient instead of using the default fetch
+    // ability to define a custom apiClient like axios instead of using the default fetch
     apiClient: {
       default() {
-        return window.fetch;
+        return {
+          async get(url, options) {
+            if (!options || typeof options !== "object") {
+              options = {};
+            }
+
+            url = new URL(url);
+            if (options.params) {
+              Object.keys(options.params).forEach(key =>
+                url.searchParams.append(key, options.params[key])
+              );
+            }
+
+            var response = {};
+            try {
+              response = await window.fetch(url, options);
+              let data = await response.json();
+              response.data = data;
+            } catch (err) {
+              throw new Error(err);
+            }
+
+            return response;
+          }
+        };
       }
     },
 

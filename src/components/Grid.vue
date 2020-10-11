@@ -94,7 +94,9 @@ import tableView from "@/components/grid-views/Grid-TableView.vue";
 import divRow from "@/components/grid-views/Grid-DivRow.vue";
 import Pagination from "@/components/Pagination.vue";
 import { generateUniqueId } from "@/mixins/utils";
-import { faPlus, faSync, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
+import { faSync } from "@fortawesome/free-solid-svg-icons/faSync";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons/faSpinner";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 import MultiSelect from "vue-multiselect";
@@ -235,8 +237,7 @@ export default {
       }
 
       if (!filter.params) {
-        console.error("Invalid filter option");
-        return;
+        throw new Error("Invalid filter option");
       }
 
       this.currentFilter = filter;
@@ -259,8 +260,7 @@ export default {
       if (typeof sort.action === "function") {
         sort.action();
       } else if (!sort.by) {
-        console.error("invalid sort option");
-        return;
+        throw new Error("Invalid sort option");
       }
 
       this.sortBy = sort;
