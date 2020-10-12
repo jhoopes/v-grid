@@ -1,24 +1,21 @@
 export default {
-
-    props: {
-        record: {
-            required: true,
-            type: Object
-        },
-        gridArgs: {
-            type: Object
-        }
+  props: {
+    record: {
+      required: true,
+      type: Object
     },
-
-    computed: {
-        isNewRow() {
-            if(this.record.isNew) {
-                return true;
-            }
-
-            return false;
-        }
+    gridArgs: {
+      type: Object
     }
+  },
 
+  computed: {
+    isNewRow() {
+      if (this.record.isNew) {
+        return true;
+      }
 
-}
+      return false;
+    }
+  }
+};
