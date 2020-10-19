@@ -173,7 +173,13 @@ export default {
               options = {};
             }
 
-            url = new URL(url);
+            try {
+              url = new URL(url);
+            }catch(err) {
+              // if initial building fails assume it's a relative path
+              url = new URL(url, window.location.protocol + '//' + window.location.host);
+            }
+
             if (options.params) {
               Object.keys(options.params).forEach(key =>
                 url.searchParams.append(key, options.params[key])
@@ -182,6 +188,11 @@ export default {
 
             var response = {};
             try {
+              options = Object.assign({}, {
+                headers: {
+                  'Accept': 'application/json'
+                }
+              }, options);
               response = await window.fetch(url, options);
               let data = await response.json();
               response.data = data;

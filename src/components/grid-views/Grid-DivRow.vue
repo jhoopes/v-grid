@@ -29,7 +29,7 @@
   </div>
 </template>
 <script>
-import is_grid_view from "@/mixins/is_grid_view";
+import is_grid_view from "../../mixins/is_grid_view";
 
 export default {
   mixins: [is_grid_view],

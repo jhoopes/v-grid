@@ -28,7 +28,7 @@
   </div>
 </template>
 <script>
-import TableRow from "@/components/generic-rows/table-row.vue";
+import TableRow from "../generic-rows/table-row.vue";
 
 export default {
   props: ["records", "recordType", "args"],
