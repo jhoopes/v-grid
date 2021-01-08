@@ -87,13 +87,13 @@
   </div>
 </template>
 <script>
-import props from "@/mixins/grid/props";
-import api from "@/mixins/api";
-import pagination from "@/mixins/pagination";
-import tableView from "@/components/grid-views/Grid-TableView.vue";
-import divRow from "@/components/grid-views/Grid-DivRow.vue";
-import Pagination from "@/components/Pagination.vue";
-import { generateUniqueId } from "@/mixins/utils";
+import props from "../mixins/grid/props";
+import api from "../mixins/api";
+import pagination from "../mixins/pagination";
+import tableView from "./grid-views/Grid-TableView.vue";
+import divRow from "./grid-views/Grid-DivRow.vue";
+import Pagination from "./Pagination.vue";
+import { generateUniqueId } from "../mixins/utils";
 import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
 import { faSync } from "@fortawesome/free-solid-svg-icons/faSync";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons/faSpinner";

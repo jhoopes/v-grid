@@ -2,7 +2,8 @@
   "name": "v-grid",
   "version": "0.1.0",
   "private": false,
-  "main": "dist/v-grid.common.js",
+  "main": "dist/v-grid.umd.js",
+  "module": "src/plugin.js",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",

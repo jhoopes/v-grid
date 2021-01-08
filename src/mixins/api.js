@@ -1,4 +1,4 @@
-import Parser from "@/classes/jsonapi_parser";
+import Parser from "../classes/jsonapi_parser";
 
 export default {
   watch: {
@@ -34,7 +34,13 @@ export default {
         Object.assign(params, this.currentFilter.params);
       }
 
-      Object.assign(params, this.recordUrlParams);
+      for(var key in this.recordUrlParams) {
+        if(Object.hasOwnProperty.call(this.recordUrlParams, key) && this.recordUrlParams[key]) {
+          console.log(this.recordUrlParams[key])
+          params[key] = this.recordUrlParams[key];
+        }
+      }
+
       this.loadingData = true;
       this.apiClient
         .get(this.recordUrl, {
