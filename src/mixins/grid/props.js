@@ -4,19 +4,19 @@ export default {
     // Currently only 2 options: tableView, divRow
     gridType: {
       type: String,
-      default: "tableView"
+      default: function() {
+          return "tableView"
+      }
     },
 
     // the record type to use when displaying each row
     // By default the grid type is set to table-row if the grid type is also table view
     recordType: {
       type: String,
-      default() {
-        if (this.gridType == "tableView") {
-          return "table-row";
-        }
+      default: function() {
 
-        return null;
+        return "table-row";
+
       }
     },
 
@@ -28,7 +28,7 @@ export default {
     // Specify Data Directly
     data: {
       type: [Object, Array],
-      default() {
+      default: function() {
         return {
           data: [],
           total: 0,

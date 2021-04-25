@@ -9,7 +9,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr
+        <component
           v-for="record in records"
           :key="record.id"
           :is="recordType"
@@ -18,7 +18,7 @@
           v-on:remove="removeRecord(record, $event)"
           @refreshRecords="$parent.runRefresh()"
           :args="args"
-        ></tr>
+        ></component>
       </tbody>
     </table>
 
@@ -31,7 +31,24 @@
 import TableRow from "../generic-rows/table-row.vue";
 
 export default {
-  props: ["records", "recordType", "args"],
+  // props: ["records", "recordType", "args"],
+
+    props: {
+      records: {
+          type: Array,
+          required: true
+      },
+        recordType: {
+          type: String,
+            required: true,
+        },
+        args: {
+          type: Object,
+            default() {
+              return {}
+            }
+        }
+    },
 
   data() {
     return {

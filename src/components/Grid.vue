@@ -99,7 +99,7 @@ import { faSync } from "@fortawesome/free-solid-svg-icons/faSync";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons/faSpinner";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-import MultiSelect from "vue-multiselect";
+import MultiSelect from '@suadelabs/vue3-multiselect'
 export default {
   name: "v-grid",
 

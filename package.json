@@ -13,13 +13,14 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
-    "vue": "^2.6.11"
+    "vue": "^3.0.0"
   },
   "devDependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.30",
+    "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-regular-svg-icons": "^5.14.0",
-    "@fortawesome/free-solid-svg-icons": "^5.14.0",
-    "@fortawesome/vue-fontawesome": "^2.0.0",
+    "@fortawesome/free-solid-svg-icons": "^5.15.3",
+    "@fortawesome/vue-fontawesome": "^3.0.0-3",
+    "laravel-vue-forms": "file:./../laravel-vue-forms",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-plugin-unit-jest": "~4.5.0",
