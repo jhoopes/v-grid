@@ -5,7 +5,7 @@ export default {
     gridType: {
       type: String,
       default: function() {
-          return "tableView"
+        return "tableView";
       }
     },
 
@@ -14,9 +14,7 @@ export default {
     recordType: {
       type: String,
       default: function() {
-
         return "table-row";
-
       }
     },
 
@@ -175,9 +173,12 @@ export default {
 
             try {
               url = new URL(url);
-            }catch(err) {
+            } catch (err) {
               // if initial building fails assume it's a relative path
-              url = new URL(url, window.location.protocol + '//' + window.location.host);
+              url = new URL(
+                url,
+                window.location.protocol + "//" + window.location.host
+              );
             }
 
             if (options.params) {
@@ -188,11 +189,15 @@ export default {
 
             var response = {};
             try {
-              options = Object.assign({}, {
-                headers: {
-                  'Accept': 'application/json'
-                }
-              }, options);
+              options = Object.assign(
+                {},
+                {
+                  headers: {
+                    Accept: "application/json"
+                  }
+                },
+                options
+              );
               response = await window.fetch(url, options);
               let data = await response.json();
               response.data = data;

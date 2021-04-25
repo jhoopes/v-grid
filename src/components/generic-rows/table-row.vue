@@ -6,9 +6,8 @@
   </tr>
 </template>
 <script lang="ts">
-import {defineComponent, toRefs} from 'vue';
+import { defineComponent, toRefs } from "vue";
 export default defineComponent({
-
   props: {
     record: {
       type: [Object, Array],
@@ -17,14 +16,14 @@ export default defineComponent({
     baseRecordId: {
       type: Number,
       default: 0
-    },
+    }
   },
 
   setup(props) {
-      const { record } = toRefs(props);
-      return {
-          record
-      }
+    const { record } = toRefs(props);
+    return {
+      record
+    };
   }
 });
 </script>

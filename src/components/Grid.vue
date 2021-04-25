@@ -50,7 +50,7 @@
     <div v-show="!loadingData">
       <component
         :is="gridType"
-        :records.sync="records"
+        v-model:records="records"
         :record-type="recordType"
         :args="gridArgs"
         :selected-records="selectedRecords"
@@ -99,7 +99,7 @@ import { faSync } from "@fortawesome/free-solid-svg-icons/faSync";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons/faSpinner";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-import MultiSelect from '@suadelabs/vue3-multiselect'
+import MultiSelect from "@suadelabs/vue3-multiselect";
 export default {
   name: "v-grid",
 

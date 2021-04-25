@@ -34,9 +34,12 @@ export default {
         Object.assign(params, this.currentFilter.params);
       }
 
-      for(var key in this.recordUrlParams) {
-        if(Object.hasOwnProperty.call(this.recordUrlParams, key) && this.recordUrlParams[key]) {
-          console.log(this.recordUrlParams[key])
+      for (var key in this.recordUrlParams) {
+        if (
+          Object.hasOwnProperty.call(this.recordUrlParams, key) &&
+          this.recordUrlParams[key]
+        ) {
+          console.log(this.recordUrlParams[key]);
           params[key] = this.recordUrlParams[key];
         }
       }
