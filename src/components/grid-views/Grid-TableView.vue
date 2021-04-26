@@ -13,7 +13,7 @@
           v-for="record in records"
           :key="record.id"
           :is="recordType"
-          v-model:record="record"
+          :record.sync="record"
           :base-record-id="baseRecordId"
           v-on:remove="removeRecord(record, $event)"
           @refreshRecords="$parent.runRefresh()"
@@ -33,22 +33,22 @@ import TableRow from "../generic-rows/table-row.vue";
 export default {
   // props: ["records", "recordType", "args"],
 
-  props: {
-    records: {
-      type: Array,
-      required: true
+    props: {
+      records: {
+          type: Array,
+          required: true
+      },
+        recordType: {
+          type: String,
+            required: true,
+        },
+        args: {
+          type: Object,
+            default() {
+              return {}
+            }
+        }
     },
-    recordType: {
-      type: String,
-      required: true
-    },
-    args: {
-      type: Object,
-      default() {
-        return {};
-      }
-    }
-  },
 
   data() {
     return {
